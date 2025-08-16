@@ -1,3 +1,4 @@
+
 # django-todo
 A simple todo app built with django
 
@@ -36,3 +37,89 @@ $ python manage.py runserver
 Once the server is hosted, head over to http://127.0.0.1:8000/todos for the App.
 
 Cheers and Happy Coding :)
+
+# Run with Docker
+
+Build and run the app using Docker:
+
+```bash
+docker build -t todo-dev .
+docker run -d -p 8000:8000 todo-dev
+```
+
+App will be available at 👉 http://localhost:8000
+
+CI/CD with Jenkins
+
+## This repository includes a Jenkinsfile that automates:
+
+Clean up old containers and images
+
+Build a fresh Docker image
+
+Deploy a new container on port 8000
+
+# Jenkinsfile (excerpt)
+```bash
+pipeline {
+    agent any
+
+    stages {
+        stage('Clean Old Containers & Images') {
+            steps {
+                sh '''
+                docker ps -aq --filter "ancestor=todo-dev" | xargs -r docker rm -f
+                docker rmi -f todo-dev || true
+                '''
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                cd /home/ubuntu/projects/django-todo
+                docker build -t todo-dev .
+                '''
+            }
+        }
+        stage('Run Container') {
+            steps {
+                sh 'docker run -d -p 8000:8000 todo-dev'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Build complete!"
+        }
+        failure {
+            echo "❌ Build failed!"
+        }
+    }
+}
+
+```
+### Jenkins Dashboard
+This shows the list of jobs and their statuses.
+
+![Jenkins Dashboard](https://raw.githubusercontent.com/Preyas07/django-cicd/main/static/Jenkins-dashboard.png)
+
+### Jenkins Build Logs
+This shows the detailed console output of a successful build.
+
+![Jenkins Build Logs](https://raw.githubusercontent.com/Preyas07/django-cicd/main/static/Jenkins-logs.png)
+
+(Save your Jenkins success screenshot in the repo as jenkins-success.png so it displays here.)
+
+## Tech Stack
+
+Python 3.11
+
+Django 3.2
+
+Docker
+
+Jenkins
+
+Cheers and Happy CI/CD 🚀
+
