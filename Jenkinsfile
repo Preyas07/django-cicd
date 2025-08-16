@@ -5,7 +5,7 @@ pipeline {
         stage('Clean Old Containers & Images') {
             steps {
                 sh '''
-                echo "🛑 Cleaning old containers..."
+                echo "Cleaning old containers..."
                 docker ps -aq --filter "ancestor=todo-dev" | xargs -r docker rm -f
                 docker rmi -f todo-dev || true
                 '''
@@ -15,7 +15,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                echo "🐳 Building Docker image..."
+                echo "Building Docker image..."
                 cd /home/ubuntu/projects/django-todo
                 docker build -t todo-dev .
                 '''
@@ -25,7 +25,7 @@ pipeline {
         stage('Run Container') {
             steps {
                 sh '''
-                echo "🚀 Running container..."
+                echo "Running container..."
                 docker run -d -p 8000:8000 todo-dev
                 '''
             }
@@ -34,10 +34,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build complete!"
+            echo "Build complete!"
         }
         failure {
-            echo "❌ Build failed!"
+            echo "Build failed!"
         }
     }
 }
