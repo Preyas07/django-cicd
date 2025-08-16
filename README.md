@@ -109,7 +109,6 @@ This shows the detailed console output of a successful build.
 
 ![Jenkins Build Logs](https://raw.githubusercontent.com/Preyas07/django-cicd/main/static/Jenkins-logs.png)
 
-(Save your Jenkins success screenshot in the repo as jenkins-success.png so it displays here.)
 
 ## Tech Stack
 
